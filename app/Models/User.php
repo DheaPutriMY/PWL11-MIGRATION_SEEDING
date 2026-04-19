@@ -4,16 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory;
 
-    // === PERUBAHAN PENTING SESUAI ERD ===
     protected $primaryKey = 'npm';
-    public $incrementing = false;        // npm bukan auto-increment
     protected $keyType = 'int';
+    public $incrementing = true; 
 
     protected $fillable = [
         'npm',
@@ -26,14 +24,15 @@ class User extends Authenticatable
 
     protected $hidden = [
         'password',
-        'remember_token',
     ];
 
-    protected function casts(): array
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+
+    // Relationship
+    public function loans()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->hasMany(Loan::class, 'user_npm', 'npm');
     }
 }
