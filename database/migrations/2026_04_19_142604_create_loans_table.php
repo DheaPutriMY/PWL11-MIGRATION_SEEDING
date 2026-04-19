@@ -11,10 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('loans', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+      Schema::create('loans', function (Blueprint $table) {
+    $table->id();
+    $table->unsignedBigInteger('user_npm');
+    $table->date('loan_at');
+    $table->date('return_at');
+    $table->timestamps();
+
+    $table->foreign('user_npm')->references('npm')->on('users')->onDelete('cascade');
+});
     }
 
     /**
